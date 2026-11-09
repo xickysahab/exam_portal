@@ -1,0 +1,210 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Admin Dashboard</title>
+
+    <style>
+        body {
+            font-family: Arial;
+            background-color: #f4f4f4;
+            margin: 0;
+        }
+
+        .header {
+            background-color: #263449;
+            color: white;
+            padding: 20px;
+        }
+
+        .navigation {
+            background-color: white;
+            padding: 15px;
+        }
+
+        .navigation a {
+            color: #333;
+            text-decoration: none;
+            background-color: #eeeeee;
+            padding: 10px 15px;
+            margin-right: 8px;
+        }
+
+        .navigation a:hover {
+            background-color: #263449;
+            color: white;
+        }
+
+        .main-content {
+            padding: 25px;
+        }
+
+        .dashboard-cards {
+            background-color: white;
+            padding: 20px;
+            margin: 15px 0;
+            width: 250px;
+            border: 1px solid #ddd;
+        }
+
+        .dashboard-cards a {
+            color: #2563eb;
+            text-decoration: none;
+        }
+
+        .status-tabs {
+            margin-bottom: 20px;
+        }
+
+        .status-tabs a {
+            color: #2563eb;
+            margin-right: 15px;
+        }
+
+        .examiner-card {
+            background-color: white;
+            padding: 15px;
+            margin: 15px 0;
+            width: 320px;
+            border: 1px solid #ddd;
+        }
+
+        .approve-button {
+            background-color: green;
+            color: white;
+            padding: 8px;
+            border: none;
+        }
+
+        .reject-button {
+            background-color: red;
+            color: white;
+            padding: 8px;
+            border: none;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Dashboard Header -->
+    <div class="header">
+        <h1>Admin Dashboard</h1>
+        <p>Examination Management Portal</p>
+    </div>
+
+
+    <!-- Dashboard Navigation -->
+    <div class="navigation">
+
+        <a href="/admin_dashboard">Dashboard</a>
+
+        <a href="/admin_dashboard?view=examiners">Examiners</a>
+
+        <a href="/admin_dashboard?view=courses">Courses</a>
+
+        <a href="#">Exams</a>
+
+        <a href="#">Rubrics</a>
+
+        <a href="#">Slots</a>
+
+        <a href="#">Bookings</a>
+
+    </div>
+
+
+    <!-- Main Dashboard Content -->
+    <div class="main-content">
+
+        {% if view == "examiners" %}
+
+            <h2>Examiner Management</h2>
+
+            <!-- Examiner Status Tabs -->
+            <div class="status-tabs">
+
+                <a href="/admin_dashboard?view=examiners">All</a>
+
+                <a href="/admin_dashboard?view=examiners&status=pending">Pending</a>
+
+                <a href="/admin_dashboard?view=examiners&status=approved">Approved</a>
+
+                <a href="/admin_dashboard?view=examiners&status=rejected">Rejected</a>
+
+            </div>
+
+
+            <!-- Examiner List -->
+            {% for examiner in examiners %}
+
+                <div class="examiner-card">
+
+                    <h3>{{ examiner.name }}</h3>
+
+                    <p>Email: {{ examiner.email }}</p>
+
+                    <p>Status: {{ examiner.status }}</p>
+
+                    {% if examiner.status == "pending" %}
+
+                        <form action="/approve/{{ examiner.id }}" method="POST">
+                            <button class="approve-button">Approve</button>
+                        </form>
+
+                        <form action="/reject/{{ examiner.id }}" method="POST">
+                            <button class="reject-button">Reject</button>
+                        </form>
+
+                    {% endif %}
+
+                </div>
+
+            {% else %}
+
+                <p>No examiners found.</p>
+
+            {% endfor %}
+
+
+        {% else %}
+
+            <h2>Dashboard Overview</h2>
+
+            <div class="dashboard-cards">
+                <h3>Examiner Management</h3>
+                <p>Manage examiner accounts and approvals.</p>
+                <a href="/admin_dashboard?view=examiners">Open</a>
+            </div>
+
+            <div class="dashboard-cards">
+                <h3>Course Management</h3>
+                <p>Create and manage courses.</p>
+            </div>
+
+            <div class="dashboard-cards">
+                <h3>Exam Management</h3>
+                <p>Create and manage exams.</p>
+            </div>
+
+            <div class="dashboard-cards">
+                <h3>Rubric Management</h3>
+                <p>Manage evaluation criteria.</p>
+            </div>
+
+            <div class="dashboard-cards">
+                <h3>Slot Management</h3>
+                <p>Manage examiner slots.</p>
+            </div>
+
+            <div class="dashboard-cards">
+                <h3>Booking Management</h3>
+                <p>Manage student bookings.</p>
+            </div>
+
+        {% endif %}
+
+    </div>
+
+</body>
+</html>
